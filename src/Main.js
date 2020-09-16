@@ -12,7 +12,12 @@ import App from './App'
 
 const { redTeamLeader } = theme
 
-const testPlayers = ['adam', 'cindy', 'david', 'edgar', 'fred', 'gary', 'helen', 'igor']
+let testPlayers
+if (process.env.NODE_ENV === 'production') {
+  testPlayers = []
+} else {
+  testPlayers = ['adam', 'cindy', 'david', 'edgar', 'fred', 'gary', 'helen', 'igor']
+}
 
 const defaultGame = {
   players: testPlayers,
@@ -54,7 +59,6 @@ function Main(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log('submit prevent')
     setSubmitted(true)
     const newGame = produce(game, (draft) => {
       draft.players.push(name)
@@ -98,8 +102,6 @@ function Main(props) {
     })
     updateGame(gRef, newGame)
     setHosting(true)
-
-    console.log(game)
   }
 
   const handleJoin = (e) => {
