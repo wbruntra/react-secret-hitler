@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/static/css/main.cfd6f708.chunk.css",
-    "main.js": "/static/js/main.d0790581.chunk.js",
-    "main.js.map": "/static/js/main.d0790581.chunk.js.map",
+    "main.js": "/static/js/main.635b4468.chunk.js",
+    "main.js.map": "/static/js/main.635b4468.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.c635c86c.js",
     "runtime-main.js.map": "/static/js/runtime-main.c635c86c.js.map",
-    "static/js/2.99b11b20.chunk.js": "/static/js/2.99b11b20.chunk.js",
-    "static/js/2.99b11b20.chunk.js.map": "/static/js/2.99b11b20.chunk.js.map",
+    "static/js/2.e0ea5eae.chunk.js": "/static/js/2.e0ea5eae.chunk.js",
+    "static/js/2.e0ea5eae.chunk.js.map": "/static/js/2.e0ea5eae.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.c99d897e651c5d3fda609837cdaf2ecd.js": "/precache-manifest.c99d897e651c5d3fda609837cdaf2ecd.js",
+    "precache-manifest.c72b46de11b659e158198f70b3da14c1.js": "/precache-manifest.c72b46de11b659e158198f70b3da14c1.js",
     "service-worker.js": "/service-worker.js",
     "static/css/main.cfd6f708.chunk.css.map": "/static/css/main.cfd6f708.chunk.css.map",
-    "static/js/2.99b11b20.chunk.js.LICENSE.txt": "/static/js/2.99b11b20.chunk.js.LICENSE.txt",
+    "static/js/2.e0ea5eae.chunk.js.LICENSE.txt": "/static/js/2.e0ea5eae.chunk.js.LICENSE.txt",
     "static/media/Fascist.JPG": "/static/media/Fascist.ed402502.JPG",
     "static/media/Liberal.JPG": "/static/media/Liberal.5179a2ef.JPG",
     "static/media/fascist-card-enact.JPG": "/static/media/fascist-card-enact.ed402502.JPG",
@@ -23,8 +23,8 @@
   },
   "entrypoints": [
     "static/js/runtime-main.c635c86c.js",
-    "static/js/2.99b11b20.chunk.js",
+    "static/js/2.e0ea5eae.chunk.js",
     "static/css/main.cfd6f708.chunk.css",
-    "static/js/main.d0790581.chunk.js"
+    "static/js/main.635b4468.chunk.js"
   ]
 }
