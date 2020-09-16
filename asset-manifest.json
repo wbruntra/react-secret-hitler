@@ -1,0 +1,30 @@
+{
+  "files": {
+    "main.css": "/static/css/main.cfd6f708.chunk.css",
+    "main.js": "/static/js/main.dadcc440.chunk.js",
+    "main.js.map": "/static/js/main.dadcc440.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.c635c86c.js",
+    "runtime-main.js.map": "/static/js/runtime-main.c635c86c.js.map",
+    "static/js/2.99b11b20.chunk.js": "/static/js/2.99b11b20.chunk.js",
+    "static/js/2.99b11b20.chunk.js.map": "/static/js/2.99b11b20.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.6b13d0a9773af3979b55e594807cec82.js": "/precache-manifest.6b13d0a9773af3979b55e594807cec82.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/main.cfd6f708.chunk.css.map": "/static/css/main.cfd6f708.chunk.css.map",
+    "static/js/2.99b11b20.chunk.js.LICENSE.txt": "/static/js/2.99b11b20.chunk.js.LICENSE.txt",
+    "static/media/Fascist.JPG": "/static/media/Fascist.ed402502.JPG",
+    "static/media/Liberal.JPG": "/static/media/Liberal.5179a2ef.JPG",
+    "static/media/fascist-card-enact.JPG": "/static/media/fascist-card-enact.ed402502.JPG",
+    "static/media/fascist-card-space.JPG": "/static/media/fascist-card-space.61fe29af.JPG",
+    "static/media/fascist-card-win.JPG": "/static/media/fascist-card-win.84f89324.JPG",
+    "static/media/liberal-card-enact.JPG": "/static/media/liberal-card-enact.5179a2ef.JPG",
+    "static/media/liberal-card-space.JPG": "/static/media/liberal-card-space.f5c7314a.JPG",
+    "static/media/liberal-card-win.JPG": "/static/media/liberal-card-win.de286c5f.JPG"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.c635c86c.js",
+    "static/js/2.99b11b20.chunk.js",
+    "static/css/main.cfd6f708.chunk.css",
+    "static/js/main.dadcc440.chunk.js"
+  ]
+}
