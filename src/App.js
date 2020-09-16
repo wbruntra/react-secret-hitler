@@ -35,6 +35,10 @@ function App(props) {
   }
 
   const handleStart = () => {
+    if (game.players.length < 5) {
+      console.log('Need more players')
+      return
+    }
     const roles = assignRoles(game)
     const event = `Game has started`
 
@@ -81,14 +85,13 @@ function App(props) {
         draft.governmentApproved = true
       })
     } else {
-      event = `Government rejected. President: ${president}, Chancellor: ${chancellor}`
+      event = `Government rejected. ${theme.presidentTitle}: ${president}, ${theme.chancellorTitle}: ${chancellor}`
       setPresident(null)
       setChancellor(null)
       newGame = produce(game, (draft) => {
         draft.events.push(event)
       })
     }
-    console.log(newGame)
     updateGame(gameRef, newGame)
   }
 

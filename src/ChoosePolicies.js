@@ -2,33 +2,8 @@ import React, { useState } from 'react'
 import produce from 'immer'
 import { capitalize, get } from 'lodash'
 import { updateGame, countPolicies, getThemedPolicyName } from './utils'
-import LiberalCardImg from './assets/Liberal.JPG'
-import FascistCardImg from './assets/Fascist.JPG'
 import theme from './theme'
-
-function ShowPolicies({ policies, onPolicyClick, chosen }) {
-  return (
-    <div className="row">
-      {policies.map((p, i) => {
-        const cardImg = p === 'LIBERAL' ? LiberalCardImg : FascistCardImg
-
-        return (
-          <div key={`policy-${i}`} className="col-2 text-center">
-            <div
-              className="card py-4 policy-space"
-              onClick={() => {
-                onPolicyClick(i)
-              }}
-            >
-              <img className="card-img-top" src={cardImg} alt="policy choice" />
-              {chosen[i] && 'YES'}
-            </div>
-          </div>
-        )
-      })}
-    </div>
-  )
-}
+import DisplayPolicies from './DisplayPolicies'
 
 function ChoosePolicies({ game, playerName, gameRef }) {
   const resetChosen = () => {
@@ -225,7 +200,7 @@ function ChoosePolicies({ game, playerName, gameRef }) {
             <h2>{capitalize(theme.chancellorTitle)} wants to veto these policies. Agree?</h2>
           </div>
         </div>
-        <ShowPolicies policies={game.policyChoices} onPolicyClick={() => {}} chosen={chosen} />
+        <DisplayPolicies policies={game.policyChoices} onPolicyClick={() => {}} chosen={chosen} />
         <div className="row mt-3">
           <div className="col-3">
             <button
@@ -269,26 +244,11 @@ function ChoosePolicies({ game, playerName, gameRef }) {
           )}
         </div>
       </div>
-      <div className="row">
-        {policies.map((p, i) => {
-          const cardImg = p === 'LIBERAL' ? LiberalCardImg : FascistCardImg
-
-          return (
-            <div key={`policy-${i}`} className="col-2 text-center">
-              <div className="card py-4 policy-space" onClick={() => togglePolicy(i)}>
-                <img className="card-img-top" src={cardImg} alt="policy choice" />
-                <div className="mt-2">
-                  {chosen[i] ? (
-                    <i className="fas fa-check green"></i>
-                  ) : (
-                    <i className="fas fa-times red"></i>
-                  )}
-                </div>
-              </div>
-            </div>
-          )
-        })}
-      </div>
+      <DisplayPolicies
+        policies={game.policyChoices}
+        onPolicyClick={(i) => togglePolicy(i)}
+        chosen={chosen}
+      />
       <div className="row">
         <div className="col">
           <button

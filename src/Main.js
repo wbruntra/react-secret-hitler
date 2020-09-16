@@ -16,7 +16,14 @@ let testPlayers
 if (process.env.NODE_ENV === 'production') {
   testPlayers = []
 } else {
-  testPlayers = ['adam', 'cindy', 'david', 'edgar', 'fred', 'gary', 'helen', 'igor']
+  testPlayers = [
+    'adam',
+    'cindy',
+    'david',
+    'edgar',
+    'fred',
+    // 'gary', 'helen', 'igor'
+  ]
 }
 
 const defaultGame = {
@@ -53,7 +60,7 @@ function Main(props) {
   const [game, setGame] = useState(props.game || defaultGame)
   const [gameCode, setGameCode] = useState(localStorage.getItem('gameCode') || '')
   const [gameRef, setGameRef] = useState(props.gameRef || null)
-  const [name, setName] = useState(props.name || 'bb')
+  const [name, setName] = useState(localStorage.getItem('playerName') || 'bb')
   const [hosting, setHosting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
 
