@@ -1,15 +1,21 @@
 import React from 'react'
 
-function Government({ game }) {
-  if (!game.governmentApproved) {
+function Government({ game, showPotentialGovernment = false, president = '', chancellor = '' }) {
+  if (!showPotentialGovernment) {
     return null
   }
   return (
     <div className="row mt-3">
-        <ul>
-          <li>President: { game.government.president } </li>
-          <li>Chancellor: { game.government.chancellor } </li>
-        </ul>
+      <div className="col-8">
+        <div className="row">
+          <div className="col-3">President:</div>
+          <div className="col-3">{president}</div>
+        </div>
+        <div className="row">
+          <div className="col-3">Chancellor:</div>
+          <div className="col-3">{chancellor}</div>
+        </div>
+      </div>
     </div>
   )
 }

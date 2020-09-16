@@ -1,16 +1,15 @@
 import React from 'react'
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import Main from './Main'
 import Game from './Game'
-import App from './App'
 
 function Routes() {
   return (
     <Router>
       <div>
-
         <Switch>
           <Route exact path="/">
-            <App />
+            <Main />
           </Route>
           <Route path="/g/:code">
             <Game />

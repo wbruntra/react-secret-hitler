@@ -1,30 +1,32 @@
 import React from 'react'
-import { filter, map } from 'lodash'
+import { getRoleTeam } from './utils'
 
-const getFascists = (roles) => {
-  console.log(roles)
-  const fascists = filter(
-    map(roles, (r, name) => {
-      // console.log(r, name)
-      const result = r !== 'liberal' ? name : null
-      return result
-    }),
-  )
-  return fascists
-}
-
-function RoleReveal({ game, playerName }) {
+function RoleReveal({ game, playerName, handleOkay }) {
   const { roles } = game
-  // console.log(roles)
   const role = roles[playerName]
-  // console.log(role)
-  // if (role === 'fascist' || role === 'hitler') {
-  // }
+  const team = getRoleTeam(role)
 
   return (
-    <div className="App">
-      <p>Your role: {role}</p>
-      {role !== 'liberal' && <p>Other fascists: {getFascists(roles).join(', ')}</p>}
+    <div className="container mt-5">
+      <div className="row">
+        <div className="col-4 col-md-3">
+          <div className="card shadow p-3 text-center">
+            <div className="row">
+              <div className="col">Player: {playerName}</div>
+            </div>
+            <div className="row">
+              <div className="col">Role: {team}</div>
+            </div>
+            <div className="row">
+              <div className="col">
+                <button className="btn btn-primary mt-4" onClick={handleOkay}>
+                  OK
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

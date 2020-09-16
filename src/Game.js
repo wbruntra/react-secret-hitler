@@ -1,26 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import './App.css'
 import { withRouter } from 'react-router-dom'
 import { get } from 'lodash'
 import produce from 'immer'
-import * as firebase from 'firebase/app'
-import 'firebase/firestore'
 import firestore from './firestore'
-
-import PlayerList from './PlayerList'
-import EventList from './EventList'
-import RoleReveal from './RoleReveal'
-import Government from './Government'
-import ChoosePolicies from './ChoosePolicies'
-import GameStatus from './GameStatus'
 import { updateGame } from './utils'
+import App from './App'
 
 function Game(props) {
+  const [name, setName] = useState(localStorage.getItem('playerName') || '')
+  const [game, setGame] = useState(null)
   const [gameRef, setGameRef] = useState(null)
   const code = get(props, 'match.params.code', null)
-  const [game, setGame] = useState(null)
-  const [name, setName] = useState('aa')
   const [submitted, setSubmitted] = useState(false)
+
   const handleSubmit = (e) => {
     e.preventDefault()
     console.log('submit prevent')
@@ -28,6 +20,10 @@ function Game(props) {
     const { players } = game
     if (players.includes(name)) {
       console.log('name already registered')
+      return
+    }
+    if (game.started) {
+      console.log('Game already started!')
       return
     }
     const newGame = produce(game, (draft) => {
@@ -38,18 +34,13 @@ function Game(props) {
     updateGame(gameRef, newGame)
   }
 
-  const confirmChoice = (chosen) => {
-    console.log(chosen)
-  }
-
   useEffect(() => {
     const register = async () => {
       const gRef = await firestore.collection('hgames').doc(code)
       setGameRef(gRef)
-      console.log(gRef)
-      // setGame(gRef.data())
       gRef.onSnapshot((doc) => {
-        setGame(doc.data())
+        const gameData = doc.data()
+        setGame(gameData)
       })
     }
     if (code !== null) {
@@ -65,37 +56,30 @@ function Game(props) {
     return null
   }
 
-  return (
-    <div className="container">
-      <h2>Secret Hitler</h2>
-      <GameStatus game={game} />
+  if (!game.players.includes(name)) {
+    return (
+      <div className="container">
+        <h2>Name not found!</h2>
+        {!submitted ? (
+          <form onSubmit={handleSubmit}>
+            <input
+              value={name}
+              onChange={(e) => {
+                setName(e.target.value)
+              }}
+            />
+            <input type="submit" />
+          </form>
+        ) : (
+          <div className="row mt-3">
+            <p>You are: {name}</p>
+          </div>
+        )}
+      </div>
+    )
+  }
 
-      {!submitted ? (
-        <form onSubmit={handleSubmit}>
-          <input
-            value={name}
-            onChange={(e) => {
-              setName(e.target.value)
-            }}
-          />
-          <input type="submit" />
-        </form>
-      ) : (
-        <div>
-          <p>You are: {name}</p>
-        </div>
-      )}
-      {game.started && <RoleReveal game={game} playerName={name} />}
-      <PlayerList game={game} playerName={name} />
-      <Government game={game} />
-      <ChoosePolicies
-        game={game}
-        playerName={name}
-        gameRef={gameRef}
-        confirmChoice={confirmChoice}
-      />
-    </div>
-  )
+  return <App game={game} gameRef={gameRef} name={name} />
 }
 
 export default withRouter(Game)

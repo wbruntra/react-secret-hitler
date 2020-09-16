@@ -1,16 +1,21 @@
 import React from 'react'
 
 function EventList({ game }) {
-  const { started, events } = game
-  if (!started) {
+  const { events } = game
+  if (events.length === 0) {
     return null
   }
+
   return (
     <>
       <h3>Events</h3>
-      <ul>
+      <ul className="list-group event-list">
         {events.map((e, i) => {
-          return <li key={`event-${i}`}>{e}</li>
+          return (
+            <li className="list-group-item" key={`event-${i}`}>
+              {e}
+            </li>
+          )
         })}
       </ul>
     </>

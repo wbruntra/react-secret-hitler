@@ -1,0 +1,39 @@
+{
+  "vetoAvailable": false,
+  "policyChoices": ["LIBERAL", "LIBERAL", "FASCIST"],
+  "chancellorHasVetoed": false,
+  "code": "maps",
+  "roles": {
+    "cindy": "fascist",
+    "bb": "fascist",
+    "edgar": "hitler",
+    "adam": "liberal",
+    "gary": "liberal",
+    "david": "liberal",
+    "fred": "liberal"
+  },
+  "started": true,
+  "discards": [],
+  "government": { "president": "bb", "chancellor": "adam" },
+  "governmentApproved": true,
+  "players": ["adam", "cindy", "david", "edgar", "fred", "gary", "bb"],
+  "presidentShouldKill": false,
+  "policies": ["LIBERAL", "FASCIST", "LIBERAL", "LIBERAL", "FASCIST", "FASCIST"],
+  "gameOver": false,
+  "presidentHasChosen": false,
+  "host": "bb",
+  "enactedPolicies": ["FASCIST", "FASCIST", "FASCIST", "FASCIST", "FASCIST"],
+  "vetoes": { "president": false, "chancellor": false },
+  "presidentRejectedVeto": false,
+  "presidentShouldInvestigate": false,
+  "events": [
+    "Game created. Code: maps",
+    "Game has started",
+    "Government in chaos! New policy enacted: FASCIST",
+    "Government in chaos! New policy enacted: FASCIST",
+    "Government in chaos! New policy enacted: FASCIST",
+    "Government in chaos! New policy enacted: FASCIST",
+    "Government in chaos! New policy enacted: FASCIST",
+    "New government approved. President: bb, Chancellor: adam"
+  ]
+}

@@ -1,0 +1,38 @@
+.policy-space {
+  img {
+    width: 100%;
+  }
+}
+
+.president {
+  font-weight: 700;
+  color: blue;
+}
+
+.chancellor {
+  font-weight: 700;
+  color: red;
+}
+
+.player-card {
+  font-size: 0.85em;
+}
+
+.event-list {
+  font-size: 0.85em;
+}
+
+@media only screen and (min-width: 768px) {
+  .player-card {
+    font-size: 1em;
+  }
+  .event-list {
+    font-size: 1em;
+  }
+}
+
+.role-reveal {
+  img {
+    width: 100%;
+  }
+}

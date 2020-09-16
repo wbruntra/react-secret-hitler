@@ -1,140 +1,37 @@
-import React, { useState, useEffect } from 'react'
-import './App.css'
+import React, { useState } from 'react'
 import produce from 'immer'
-import words from './data/short-got.json'
-import { random, shuffle } from 'lodash'
-import randomString from 'randomstring'
+import { get, capitalize } from 'lodash'
 import { withRouter } from 'react-router-dom'
-import * as firebase from 'firebase/app'
-import 'firebase/firestore'
-import firestore from './firestore'
 import PlayerList from './PlayerList'
 import Government from './Government'
 import EventList from './EventList'
+import RoleModal from './RoleModal'
 import RoleReveal from './RoleReveal'
 import ChoosePolicies from './ChoosePolicies'
 import GameStatus from './GameStatus'
-import { updateGame, countPolicies, identifyHitler, hitlerAsChancellorWin } from './utils'
+import ActionBar from './ActionBar'
+import { updateGame, refreshPolicies, assignRoles, createPolicies, isGameOver } from './utils'
+import SpecialRulesModal from './SpecialRulesModal'
+import theme from './theme'
 
-const createPolicies = () => {
-  const L = Array(5).fill('L')
-  const F = Array(9).fill('F')
-  const policies = L.concat(F)
-  return shuffle(policies)
-}
+const { redTeamLeader } = theme
 
-const assignRoles = (game) => {
-  const { players } = game
-  const numLiberals = Math.ceil(players.length / 2)
-  let roles = Array(numLiberals).fill('liberal')
-  roles.push('hitler')
-  while (roles.length < players.length) {
-    roles.push('fascist')
-  }
-  const randomRoles = shuffle(roles)
-  const result = {}
-  players.forEach((p, i) => {
-    result[p] = randomRoles[i]
-  })
-  return result
-}
-
-const testPlayers = ['a', 'c', 'd', 'e', 'f', 'g']
-
-const defaultGame = {
-  players: testPlayers,
-  roles: {},
-  started: false,
-  host: null,
-  policies: [],
-  discards: [],
-  government: {
-    president: null,
-    chancellor: null,
-  },
-  governmentApproved: false,
-  events: [],
-  presidentHasChosen: false,
-  policyChoices: [],
-  enactedPolicies: [],
-  gameOver: false,
-}
-
-const randomChoice = (arr) => {
-  return arr[random(0, arr.length - 1)]
-}
-
-function App() {
-  const [game, setGame] = useState(defaultGame)
-  const [gameCode, setGameCode] = useState(localStorage.getItem('gameCode') || '')
-  const [hosting, setHosting] = useState(false)
-  const [name, setName] = useState('bb')
-  const [submitted, setSubmitted] = useState(false)
-  const [link, setLink] = useState('')
-  const [gameRef, setGameRef] = useState(null)
+function App(props) {
+  const { game, gameRef, hosting = false } = props
+  const [name, setName] = useState(props.name || '')
   const [president, setPresident] = useState(null)
   const [chancellor, setChancellor] = useState(null)
+  const [viewingIdentity, setViewingIdentity] = useState(false)
+  const [chosenPlayer, setChosenPlayer] = useState(null)
 
-  const setGovernment = () => {
-    if (!president || !chancellor) {
-      console.log('set pres & chan')
-      return
-    }
-    const event = `New government approved. President: ${president}, Chancellor: ${chancellor}`
+  const handleChoosePlayer = (p) => {
+    setChosenPlayer(p)
+    setViewingIdentity(true)
     const newGame = produce(game, (draft) => {
-      draft.government = {
-        president: president,
-        chancellor: chancellor,
-      }
-      draft.policyChoices = game.policies.slice(0, 3)
-      draft.policies = game.policies.slice(3)
-      draft.events.push(event)
-      draft.presidentHasChosen = false
-      draft.governmentApproved = true
+      draft.events.push(`${name} investigated ${p}'s membership`)
+      draft.presidentShouldInvestigate = false
     })
-    console.log(newGame)
     updateGame(gameRef, newGame)
-  }
-
-  const rejectGovernment = () => {
-    const event = `Government rejected. President: ${president}, Chancellor: ${chancellor}`
-    console.log(event)
-    return
-    const newGame = produce(game, (draft) => {
-      draft.government = {
-        president: president,
-        chancellor: chancellor,
-      }
-      draft.events.push(event)
-    })
-    console.log(newGame)
-    updateGame(gameRef, newGame)
-  }
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    console.log('submit prevent')
-    setSubmitted(true)
-    const newGame = produce(game, (draft) => {
-      draft.players.push(name)
-    })
-    setGame(newGame)
-  }
-
-  const handleHosting = async (e) => {
-    e.preventDefault()
-    localStorage.setItem('gameCode', gameCode)
-    console.log('hosting!', gameCode)
-    setHosting(true)
-    let gRef = await firestore.collection('hgames').doc(gameCode)
-    setGameRef(gRef)
-    gRef.onSnapshot((doc) => {
-      setGame(doc.data())
-    })
-    gRef.update({
-      host: name,
-      lastUpdate: firebase.firestore.FieldValue.serverTimestamp(),
-    })
   }
 
   const handleStart = () => {
@@ -147,29 +44,52 @@ function App() {
       draft.started = true
       draft.events.push(event)
     })
-    console.log(newGame)
     updateGame(gameRef, newGame)
   }
 
-  const handleCreateGame = async () => {
-    console.log('create game!')
-    const wordCode = randomChoice(words)
-    setGameCode(wordCode)
-    localStorage.setItem('gameCode', wordCode)
-    const newGame = produce(game, (draft) => {
-      draft.code = wordCode
-      draft.host = name
-    })
-    setGame(newGame)
-    let gRef = await firestore.collection('hgames').doc(wordCode)
+  const dismissReveal = () => {
+    console.log('reveal dismissed!')
+    setViewingIdentity(false)
+    setChosenPlayer(false)
+  }
 
-    setGameRef(gRef)
-    gRef.onSnapshot((doc) => {
-      setGame(doc.data())
-    })
-    updateGame(gRef, newGame)
-
-    console.log(game)
+  const setGovernment = (approved = true) => {
+    if (!president || !chancellor) {
+      console.log('set pres & chan')
+      return
+    }
+    let event
+    let newGame
+    if (approved) {
+      event = `New government approved. ${theme.presidentTitle}: ${president}, ${theme.chancellorTitle}: ${chancellor}`
+      newGame = produce(game, (draft) => {
+        let tempPolicies = game.policies
+        if (game.policies < 3) {
+          tempPolicies = refreshPolicies(game)
+          draft.discards = []
+        }
+        draft.government = {
+          president: president,
+          chancellor: chancellor,
+        }
+        draft.policyChoices = tempPolicies.slice(0, 3)
+        draft.policies = tempPolicies.slice(3)
+        draft.events.push(event)
+        draft.presidentHasChosen = false
+        draft.presidentRejectedVeto = false
+        draft.chancellorHasVetoed = false
+        draft.governmentApproved = true
+      })
+    } else {
+      event = `Government rejected. President: ${president}, Chancellor: ${chancellor}`
+      setPresident(null)
+      setChancellor(null)
+      newGame = produce(game, (draft) => {
+        draft.events.push(event)
+      })
+    }
+    console.log(newGame)
+    updateGame(gameRef, newGame)
   }
 
   const handlePlayerClick = (playerName) => {
@@ -188,73 +108,101 @@ function App() {
     }
   }
 
-  const hitlerName = identifyHitler(game)
-  console.log(hitlerName)
+  if (!game.started) {
+    return (
+      <div className="container">
+        <PlayerList game={game} playerName={name} onPlayerClick={handlePlayerClick} />
+        {hosting && (
+          <div className="row mt-3">
+            <div className="col">
+              <button className="btn btn-primary" onClick={handleStart}>
+                Start Game
+              </button>
+            </div>
+          </div>
+        )}
+        <hr />
+        <EventList game={game} />
+      </div>
+    )
+  }
+
+  const wasLastPresident = get(game, 'lastPresident') === name
+  const gameOver = isGameOver(game)
+
+  if (viewingIdentity) {
+    return <RoleReveal game={game} playerName={chosenPlayer} handleOkay={dismissReveal} />
+  }
+
+  if (game.presidentShouldInvestigate && wasLastPresident) {
+    return (
+      <>
+        <PlayerList
+          headline={'Choose a player to investigate'}
+          game={game}
+          playerName={name}
+          onPlayerClick={handleChoosePlayer}
+        />
+      </>
+    )
+  }
 
   return (
     <div className="container">
-      <h2>Secret Hitler</h2>
-      {hitlerAsChancellorWin(game) && <h2>HITLER IS CHANCELLOR</h2>}
+      <h2>Secret {capitalize(redTeamLeader)}</h2>
+      <RoleModal game={game} playerName={name} />
+      <SpecialRulesModal game={game} />
       <GameStatus game={game} />
 
-      <div className="row">
-        <div className="col">
-          {!hosting ? (
-            <form onSubmit={handleHosting}>
-              <input
-                value={gameCode}
-                onChange={(e) => {
-                  setGameCode(e.target.value)
-                }}
-              />
-              <input type="submit" />
-            </form>
-          ) : (
-            <p>Hosting: {gameCode} </p>
-          )}
-        </div>
-      </div>
-      <div className="row my-3">
-        <div className="col">
-          {!submitted ? (
-            <form onSubmit={handleSubmit}>
-              <input
-                value={name}
-                onChange={(e) => {
-                  setName(e.target.value)
-                }}
-              />
-              <input type="submit" />
-            </form>
-          ) : (
-            <>
-              <p>{name}</p>
-              <button onClick={handleCreateGame}>Create Game</button>
-            </>
-          )}
-        </div>
-      </div>
-
-      <PlayerList game={game} playerName={name} onPlayerClick={handlePlayerClick} />
-      <Government game={game} />
       <div className="row mt-3">
-        {!game.started && (
-          <div className="col">
-            <button onClick={handleStart}>Start Game</button>
-          </div>
-        )}
-        {!game.governmentApproved && (
+        <div className="col">
+          <p>
+            Your name:
+            <input
+              value={name}
+              onChange={(e) => {
+                setName(e.target.value)
+              }}
+            />
+          </p>
+        </div>
+      </div>
+      <ChoosePolicies game={game} playerName={name} gameRef={gameRef} />
+
+      <PlayerList
+        game={game}
+        playerName={name}
+        onPlayerClick={handlePlayerClick}
+        showRoles={gameOver}
+      />
+      <Government
+        game={game}
+        president={president}
+        chancellor={chancellor}
+        showPotentialGovernment={hosting}
+      />
+      <div className="row mt-3">
+        {!game.governmentApproved && hosting && (
           <>
-            <div className="col">
-              <button onClick={setGovernment}>Approve Government</button>
+            <div className="col-4 col-md-3">
+              <button className="btn btn-secondary" onClick={setGovernment}>
+                Approve Government
+              </button>
             </div>
-            <div className="col">
-              <button onClick={rejectGovernment}>Reject Government</button>
+            <div className="col-4 col-md-3">
+              <button
+                className="btn btn-secondary"
+                onClick={() => {
+                  setGovernment(false)
+                }}
+              >
+                Reject Government
+              </button>
             </div>
           </>
         )}
       </div>
-      <ChoosePolicies game={game} playerName={name} gameRef={gameRef} />
+      {hosting && <ActionBar game={game} gameRef={gameRef} />}
       <hr />
       <EventList game={game} />
     </div>
