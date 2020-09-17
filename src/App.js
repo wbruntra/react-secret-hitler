@@ -156,23 +156,21 @@ function App(props) {
       <SpecialRulesModal game={game} />
       <GameStatus game={game} />
 
-      <div className="row mt-3">
-        <div className="col">
-          <p>
-            Your name:{' '}
-            {process.env.NODE_ENV === 'production' ? (
-              name
-            ) : (
+      {process.env.NODE_ENV !== 'production' && (
+        <div className="row mt-3">
+          <div className="col">
+            <p>
+              Change Name?
               <input
                 value={name}
                 onChange={(e) => {
                   setName(e.target.value)
                 }}
               />
-            )}
-          </p>
+            </p>
+          </div>
         </div>
-      </div>
+      )}
       <ChoosePolicies game={game} playerName={name} gameRef={gameRef} />
 
       <PlayerList
