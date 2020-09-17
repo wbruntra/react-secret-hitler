@@ -4,3 +4,31 @@
 @import '~bootstrap/scss/bootstrap.scss';
 
 @import './custom';
+
+$lightBlue: #6495ed;
+$white: #fff;
+$black: #000;
+$deepRed: #9e2424;
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  background-color: $lightBlue;
+  font-family: $font-family-base;
+  margin-bottom: 60px;
+}
+
+.container {
+  padding: 20px 8%;
+  background-color: $white;
+  box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.2), 0 14px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.headline,
+h2,
+h3 {
+  font-family: $font-family-serif;
+}

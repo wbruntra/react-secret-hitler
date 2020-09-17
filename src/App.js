@@ -152,7 +152,7 @@ function App(props) {
 
   return (
     <div className="container">
-      <h2>Secret {capitalize(redTeamLeader)}</h2>
+      <h2 className="headline">Secret {capitalize(redTeamLeader)}</h2>
       <RoleModal game={game} playerName={name} />
       <SpecialRulesModal game={game} />
       <GameStatus game={game} />
@@ -207,7 +207,7 @@ function App(props) {
       </div>
       {hosting && <ActionBar game={game} gameRef={gameRef} />}
       <hr />
-      <EventList game={game} />
+      <EventList game={game} show={6} />
     </div>
   )
 }

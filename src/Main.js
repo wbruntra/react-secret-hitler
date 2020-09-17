@@ -57,10 +57,13 @@ const randomChoice = (arr) => {
 }
 
 function Main(props) {
+  const savedName =
+    process.env.NODE_ENV === 'production' ? localStorage.getItem('playerName') || '' : 'testhost'
+
   const [game, setGame] = useState(props.game || defaultGame)
   const [gameCode, setGameCode] = useState(localStorage.getItem('gameCode') || '')
   const [gameRef, setGameRef] = useState(props.gameRef || null)
-  const [name, setName] = useState(localStorage.getItem('playerName') || 'bb')
+  const [name, setName] = useState(savedName)
   const [hosting, setHosting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
 
