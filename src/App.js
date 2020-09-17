@@ -161,7 +161,7 @@ function App(props) {
           <p>
             Your name:{' '}
             {process.env.NODE_ENV === 'production' ? (
-              { name }
+              name
             ) : (
               <input
                 value={name}

@@ -9,10 +9,11 @@ function Game(props) {
   const prod = process.env.NODE_ENV === 'production'
   const defaultName = !prod ? localStorage.getItem('playerName') || '' : ''
 
+  const [loaded, setLoaded] = useState(false)
   const [name, setName] = useState(defaultName)
   const [game, setGame] = useState(null)
   const [gameRef, setGameRef] = useState(null)
-  const code = get(props, 'params.code', null)
+  const code = get(props, 'match.params.code', null)
   const [submitted, setSubmitted] = useState(false)
 
   const handleSubmit = (e) => {
@@ -40,6 +41,7 @@ function Game(props) {
     const register = async () => {
       const gRef = await firestore.collection('hgames').doc(code)
       setGameRef(gRef)
+      setLoaded(true)
       gRef.onSnapshot((doc) => {
         const gameData = doc.data()
         setGame(gameData)
@@ -47,10 +49,6 @@ function Game(props) {
     }
     if (code !== null) {
       register()
-    }
-    const playerName = localStorage.getItem('playerName')
-    if (playerName !== null) {
-      setName(playerName)
     }
   }, [code])
 
@@ -65,12 +63,13 @@ function Game(props) {
         {!submitted ? (
           <form onSubmit={handleSubmit}>
             <input
+              autoFocus
               value={name}
               onChange={(e) => {
                 setName(e.target.value)
               }}
             />
-            <input type="submit" />
+            <input type="submit" className="btn btn-primary ml-3" value="Next" />
           </form>
         ) : (
           <div className="row mt-3">

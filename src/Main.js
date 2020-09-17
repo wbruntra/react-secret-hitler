@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import produce from 'immer'
 import words from './data/short-got.json'
 import { random, capitalize } from 'lodash'
-import { useLocation } from 'wouter'
+import { useHistory } from 'react-router-dom'
 import * as firebase from 'firebase/app'
 import 'firebase/firestore'
 import firestore from './firestore'
@@ -57,25 +57,21 @@ const randomChoice = (arr) => {
 }
 
 function Main(props) {
-  const savedName =
-    process.env.NODE_ENV === 'production' ? localStorage.getItem('playerName') || '' : 'testhost'
+  const prod = process.env.NODE_ENV === 'production'
+  const savedName = prod ? localStorage.getItem('playerName') || '' : 'testhost'
 
   const [game, setGame] = useState(props.game || defaultGame)
+  const [nameConfirmed, setNameConfirmed] = useState(false)
   const [gameCode, setGameCode] = useState(localStorage.getItem('gameCode') || '')
   const [gameRef, setGameRef] = useState(props.gameRef || null)
   const [name, setName] = useState(savedName)
   const [hosting, setHosting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
 
-  const [location, setLocation] = useLocation()
+  const history = useHistory()
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    setSubmitted(true)
-    const newGame = produce(game, (draft) => {
-      draft.players.push(name)
-    })
-    setGame(newGame)
+  const handleNameConfirm = () => {
+    setNameConfirmed(true)
   }
 
   const handleHosting = async (e) => {
@@ -87,6 +83,7 @@ function Main(props) {
     setGameRef(gRef)
     gRef.onSnapshot((doc) => {
       const gameData = doc.data()
+      console.log(gameData)
       setGame(gameData)
     })
     gRef.update({
@@ -96,12 +93,12 @@ function Main(props) {
   }
 
   const handleCreateGame = async () => {
-    console.log('create game!')
     const wordCode = randomChoice(words)
     setGameCode(wordCode)
     const event = `Game created. Code: ${wordCode}`
     localStorage.setItem('gameCode', wordCode)
     const newGame = produce(game, (draft) => {
+      draft.players.push(name)
       draft.code = wordCode
       draft.host = name
       draft.events.push(event)
@@ -118,7 +115,29 @@ function Main(props) {
 
   const handleJoin = (e) => {
     e.preventDefault()
-    setLocation(`/g/${gameCode}`)
+    history.push(`/g/${gameCode}?name=${name}`)
+  }
+
+  if (!nameConfirmed) {
+    return (
+      <div className="container">
+        <div className="row mt-3">
+          <div className="col-3">Enter your name:</div>
+          <div className="col">
+            <form onSubmit={handleNameConfirm}>
+              <input
+                autoFocus
+                value={name}
+                onChange={(e) => {
+                  setName(e.target.value)
+                }}
+              />
+              <input className="btn btn-primary ml-3" type="submit" value="Next" />
+            </form>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   if (!game.started && !game.code) {
@@ -126,52 +145,28 @@ function Main(props) {
       <div className="container">
         <h2 className="headline text-center">Secret {capitalize(redTeamLeader)}</h2>
         <div className="row mt-3">
-          <div className="col-3">Take Over: </div>
-          <div className="col">
-            <form onSubmit={handleHosting}>
-              <input
-                value={gameCode}
-                onChange={(e) => {
-                  setGameCode(e.target.value)
-                }}
-              />
-              <input className="btn btn-primary ml-3" type="submit" value="GO" />
-            </form>
-          </div>
+          <>
+            <p>Your name: {name}</p>
+          </>
         </div>
         <div className="row mt-3">
-          <div className="col-3">Join: </div>
-          <div className="col">
-            <form onSubmit={handleJoin}>
-              <input
-                value={gameCode}
-                onChange={(e) => {
-                  setGameCode(e.target.value)
-                }}
-              />
-              <input className="btn btn-primary ml-3" type="submit" value="GO" />
-            </form>
-          </div>
+          <input value={gameCode} onChange={(e) => setGameCode(e.target.value)} />
         </div>
         <div className="row mt-3">
-          <div className="col-3">Create:</div>
           <div className="col">
-            {!submitted ? (
-              <form onSubmit={handleSubmit}>
-                <input
-                  value={name}
-                  onChange={(e) => {
-                    setName(e.target.value)
-                  }}
-                />
-                <input className="btn btn-primary ml-3" type="submit" value="GO" />
-              </form>
-            ) : (
-              <>
-                <p>Your name: {name}</p>
-                <button onClick={handleCreateGame}>Create Game</button>
-              </>
-            )}
+            <button className="btn btn-primary ml-3" onClick={handleHosting}>
+              Host Game
+            </button>
+          </div>
+          <div className="col">
+            <button className="btn btn-primary ml-3" onClick={handleJoin}>
+              Join Game
+            </button>
+          </div>
+          <div className="col">
+            <button className="btn btn-primary ml-3" onClick={handleCreateGame}>
+              Create Game
+            </button>
           </div>
         </div>
       </div>
