@@ -4,6 +4,7 @@ import { capitalize, get } from 'lodash'
 import { updateGame, countPolicies, getThemedPolicyName } from './utils'
 import theme from './theme'
 import DisplayPolicies from './DisplayPolicies'
+import SimpleOverlay from './SimpleOverlay'
 
 function ChoosePolicies({ game, playerName, gameRef }) {
   const resetChosen = () => {
@@ -33,7 +34,7 @@ function ChoosePolicies({ game, playerName, gameRef }) {
           if (game.chancellorHasVetoed) {
             draft.discards.push(...game.policyChoices)
             draft.policyChoices = []
-            event = `${capitalize(theme.presidentTitle)} has agreed to veto`
+            event = `${capitalize(theme.presidentTitle)} has agreed to veto. Government fails!`
             draft.governmentApproved = false
             draft.government = {
               president: '',
@@ -156,7 +157,14 @@ function ChoosePolicies({ game, playerName, gameRef }) {
   const job = getJob()
 
   if (!job) {
-    return 'Waiting for government to choose a new policy...'
+    if (process.env.NODE_ENV !== 'production') {
+      return 'Waiting for government to choose a new policy...'
+    }
+    return (
+      <SimpleOverlay title="Government in Session">
+        <p>Waiting for government to choose a new policy...</p>
+      </SimpleOverlay>
+    )
   }
 
   if (
@@ -164,11 +172,19 @@ function ChoosePolicies({ game, playerName, gameRef }) {
     !game.chancellorHasVetoed &&
     game.policyChoices.length === 2
   ) {
-    return `Waiting for ${theme.chancellorTitle}...`
+    return (
+      <SimpleOverlay title="Government in Session">
+        <p>Waiting for {theme.chancellorTitle}</p>
+      </SimpleOverlay>
+    )
   }
 
   if (job === theme.presidentTitle && game.presidentRejectedVeto) {
-    return `Rejected veto. Waiting for ${theme.chancellorTitle}...`
+    return (
+      <SimpleOverlay title="Government in Session">
+        <p>Rejected veto. Waiting for {theme.chancellorTitle}</p>
+      </SimpleOverlay>
+    )
   }
 
   if (job === theme.chancellorTitle && game.chancellorHasVetoed && !game.presidentRejectedVeto) {
@@ -181,12 +197,14 @@ function ChoosePolicies({ game, playerName, gameRef }) {
     game.policyChoices.length === 3
   ) {
     return (
-      <div className="row">
-        <div className="col">
-          <p>You are the {job}</p>
-          <p>Waiting for {theme.presidentTitle} to choose</p>
+      <SimpleOverlay title="Government in Session">
+        <div className="row">
+          <div className="col">
+            <p>You are the {job}</p>
+            <p>Waiting for {theme.presidentTitle} to choose</p>
+          </div>
         </div>
-      </div>
+      </SimpleOverlay>
     )
   }
 
@@ -195,89 +213,97 @@ function ChoosePolicies({ game, playerName, gameRef }) {
   if (job === theme.presidentTitle && game.chancellorHasVetoed) {
     return (
       <>
-        <div className="row">
-          <div className="col">
-            <h2>{capitalize(theme.chancellorTitle)} wants to veto these policies. Agree?</h2>
+        <SimpleOverlay title="Veto Proposed">
+          <div className="row">
+            <div className="col">
+              <p>{capitalize(theme.chancellorTitle)} wants to veto these policies. Agree?</p>
+            </div>
           </div>
-        </div>
-        <DisplayPolicies policies={game.policyChoices} onPolicyClick={() => {}} chosen={chosen} />
-        <div className="row mt-3">
-          <div className="col-3">
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={() => {
-                vetoChoice()
-              }}
-            >
-              Agree to Veto
-            </button>
+          <DisplayPolicies
+            policies={game.policyChoices}
+            onPolicyClick={() => {}}
+            chosen={chosen}
+          />
+          <div className="row mt-3">
+            <div className="col-4">
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={() => {
+                  vetoChoice()
+                }}
+              >
+                Agree to Veto
+              </button>
+            </div>
+            <div className="col-4">
+              <button
+                type="button"
+                className="btn btn-warning"
+                onClick={() => {
+                  vetoChoice(false)
+                }}
+              >
+                Reject Veto
+              </button>
+            </div>
           </div>
-          <div className="col-3">
-            <button
-              type="button"
-              className="btn btn-warning"
-              onClick={() => {
-                vetoChoice(false)
-              }}
-            >
-              Reject Veto
-            </button>
-          </div>
-        </div>
+        </SimpleOverlay>
       </>
     )
   }
 
   return (
     <>
-      <div className="row">
-        <div className="col">
-          <p>
-            You are the {job}.{' '}
-            {job === theme.presidentTitle
-              ? 'Choose 2 policies to keep'
-              : 'Choose a policy to adopt'}
-          </p>
-          {game.presidentRejectedVeto && (
-            <p>The {theme.presidentTitle} rejected your veto. Choose a policy to enact</p>
-          )}
+      <SimpleOverlay title="Government in Session">
+        <div className="row">
+          <div className="col">
+            <p>
+              You are the {job}.{' '}
+              {job === theme.presidentTitle
+                ? 'Choose 2 policies to keep'
+                : 'Choose a policy to adopt'}
+            </p>
+            {game.presidentRejectedVeto && (
+              <p>The {theme.presidentTitle} rejected your veto. Choose a policy to enact</p>
+            )}
+          </div>
         </div>
-      </div>
-      <DisplayPolicies
-        policies={game.policyChoices}
-        onPolicyClick={(i) => togglePolicy(i)}
-        chosen={chosen}
-      />
-      <div className="row">
-        <div className="col">
-          <button
-            type="button"
-            className="btn btn-primary mt-2"
-            onClick={() => {
-              const confirmed = getPolicies()
-              if (confirmed.length === policies.length - 1) {
-                confirmChoice(chosen)
-              }
-            }}
-          >
-            Confirm
-          </button>
-        </div>
-        {counts.fascist === 5 && job === theme.chancellorTitle && !game.presidentRejectedVeto && (
+        <DisplayPolicies
+          policies={game.policyChoices}
+          onPolicyClick={(i) => togglePolicy(i)}
+          chosen={chosen}
+        />
+        <div className="row">
           <div className="col">
             <button
               type="button"
-              className="btn btn-danger"
+              className="btn btn-primary mt-3"
               onClick={() => {
-                vetoChoice()
+                const confirmed = getPolicies()
+                if (confirmed.length === policies.length - 1) {
+                  confirmChoice(chosen)
+                }
               }}
             >
-              Veto
+              Confirm
             </button>
           </div>
-        )}
-      </div>
+          {counts.fascist === 5 && job === theme.chancellorTitle && !game.presidentRejectedVeto && (
+            <div className="col">
+              <button
+                type="button"
+                className="btn btn-danger"
+                onClick={() => {
+                  vetoChoice()
+                }}
+              >
+                Veto
+              </button>
+            </div>
+          )}
+        </div>
+      </SimpleOverlay>
     </>
   )
 }

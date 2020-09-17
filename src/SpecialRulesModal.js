@@ -22,7 +22,7 @@ function SpecialRulesModal({ game }) {
         Show Rules
       </button>
 
-      <Modal show={show} onHide={handleClose}>
+      <Modal size="lg" show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Rules for {numPlayers} players </Modal.Title>
         </Modal.Header>
@@ -30,9 +30,11 @@ function SpecialRulesModal({ game }) {
           <ul>
             {numPlayers <= 6 && (
               <>
-                <li>Two players are {redTeam}s</li>
                 <li>
-                  {capitalize(redTeamLeader)} knows who the {redTeam} is
+                  Two players (including {redTeamLeader}) are {redTeam}s
+                </li>
+                <li>
+                  {capitalize(redTeamLeader)} knows who the other {redTeam} is
                 </li>
                 <li>
                   After the 3rd {redTeam} policy is enacted, the {theme.presidentTitle} will view
@@ -43,12 +45,16 @@ function SpecialRulesModal({ game }) {
             {numPlayers >= 7 && (
               <>
                 {numPlayers < 9 ? (
-                  <li>Three players are {redTeam}s</li>
+                  <li>
+                    Three players (including {redTeamLeader}) are {redTeam}s
+                  </li>
                 ) : (
-                  <li>Four players are {redTeam}s</li>
+                  <li>
+                    Four players (including {redTeamLeader}) are {redTeam}s
+                  </li>
                 )}
                 <li>
-                  {capitalize(redTeamLeader)} doesn't know who the {redTeam}s are
+                  {capitalize(redTeamLeader)} doesn't know who the other {redTeam}s are
                 </li>
                 {numPlayers >= 9 && (
                   <li>

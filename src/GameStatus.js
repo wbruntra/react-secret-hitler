@@ -42,22 +42,25 @@ function GameStatus({ game }) {
   }
 
   if (gameOver) {
-    return <>{endDeclaration}</>
+    return (
+      <div className="mt-3">
+        {endDeclaration}
+        {/* <ul>
+          <li>{theme.blueTeam} Policies: {counts.liberal} </li>
+          <li>{theme.redTeam} Policies: {counts.fascist} </li>
+        </ul> */}
+      </div>
+    )
   }
 
   return (
     <>
       <div className="row mt-3">
-        {/* <ul>
-          <li>Liberal Policies: {counts.liberal} </li>
-          <li>Fascist Policies: {counts.fascist} </li>
-        </ul> */}
-        <ul>
-          <li>Policies Left in Deck: {game.policies.length}</li>
-          <li>Discarded: {game.discards.length} </li>
-        </ul>
+        <div className="col">Policies Left in Deck: {game.policies.length}</div>
+        <div className="col">Discarded: {game.discards.length} </div>
       </div>
-      <div className="row">
+      {gameOver && endDeclaration}
+      <div className="row mt-3">
         {Array(counts.liberal)
           .fill(true)
           .map((_, i) => {

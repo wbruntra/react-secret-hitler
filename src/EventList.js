@@ -10,7 +10,7 @@ function EventList({ game, show = 0 }) {
 
   return (
     <>
-      <h3>Events</h3>
+      <h3 className="headline text-center">Events</h3>
       <ul className="list-group event-list">
         {shownEvents.map((e, i) => {
           return (

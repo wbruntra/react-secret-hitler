@@ -1,14 +1,10 @@
 @import './fonts';
+@import './colors';
 @import './variables';
 
 @import '~bootstrap/scss/bootstrap.scss';
 
 @import './custom';
-
-$lightBlue: #6495ed;
-$white: #fff;
-$black: #000;
-$deepRed: #9e2424;
 
 html {
   position: relative;
@@ -16,7 +12,7 @@ html {
 }
 
 body {
-  background-color: $lightBlue;
+  background-color: $light-blue;
   font-family: $font-family-base;
   margin-bottom: 60px;
 }

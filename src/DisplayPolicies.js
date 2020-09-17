@@ -10,7 +10,7 @@ function DisplayPolicies({ policies, onPolicyClick = () => {}, chosen = [] }) {
 
         return (
           <div key={`policy-${i}`} className="col-2 text-center">
-            <div className="card py-4 policy-space" onClick={() => onPolicyClick(i)}>
+            <div className="card py-3 policy-space" onClick={() => onPolicyClick(i)}>
               <img className="card-img-top" src={cardImg} alt="policy choice" />
               <div className="mt-2">
                 {chosen[i] ? (

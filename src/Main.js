@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import produce from 'immer'
 import words from './data/short-got.json'
 import { random, capitalize } from 'lodash'
-import { withRouter } from 'react-router-dom'
+import { useLocation } from 'wouter'
 import * as firebase from 'firebase/app'
 import 'firebase/firestore'
 import firestore from './firestore'
@@ -67,6 +67,8 @@ function Main(props) {
   const [hosting, setHosting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
 
+  const [location, setLocation] = useLocation()
+
   const handleSubmit = (e) => {
     e.preventDefault()
     setSubmitted(true)
@@ -116,14 +118,13 @@ function Main(props) {
 
   const handleJoin = (e) => {
     e.preventDefault()
-    props.history.push(`/g/${gameCode}`)
-    console.log(props.location)
+    setLocation(`/g/${gameCode}`)
   }
 
   if (!game.started && !game.code) {
     return (
       <div className="container">
-        <h2>Secret {capitalize(redTeamLeader)}</h2>
+        <h2 className="headline text-center">Secret {capitalize(redTeamLeader)}</h2>
         <div className="row mt-3">
           <div className="col-3">Take Over: </div>
           <div className="col">
@@ -134,7 +135,7 @@ function Main(props) {
                   setGameCode(e.target.value)
                 }}
               />
-              <input type="submit" />
+              <input className="btn btn-primary ml-3" type="submit" value="GO" />
             </form>
           </div>
         </div>
@@ -148,7 +149,7 @@ function Main(props) {
                   setGameCode(e.target.value)
                 }}
               />
-              <input type="submit" />
+              <input className="btn btn-primary ml-3" type="submit" value="GO" />
             </form>
           </div>
         </div>
@@ -163,7 +164,7 @@ function Main(props) {
                     setName(e.target.value)
                   }}
                 />
-                <input type="submit" />
+                <input className="btn btn-primary ml-3" type="submit" value="GO" />
               </form>
             ) : (
               <>
@@ -180,4 +181,4 @@ function Main(props) {
   return <App game={game} gameRef={gameRef} name={name} hosting={hosting} />
 }
 
-export default withRouter(Main)
+export default Main

@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import produce from 'immer'
 import { get, capitalize } from 'lodash'
-import { withRouter } from 'react-router-dom'
 import PlayerList from './PlayerList'
 import Government from './Government'
 import EventList from './EventList'
@@ -152,7 +151,7 @@ function App(props) {
 
   return (
     <div className="container">
-      <h2 className="headline">Secret {capitalize(redTeamLeader)}</h2>
+      <h1 className="headline text-center mb-3">Secret {capitalize(redTeamLeader)}</h1>
       <RoleModal game={game} playerName={name} />
       <SpecialRulesModal game={game} />
       <GameStatus game={game} />
@@ -160,13 +159,17 @@ function App(props) {
       <div className="row mt-3">
         <div className="col">
           <p>
-            Your name:
-            <input
-              value={name}
-              onChange={(e) => {
-                setName(e.target.value)
-              }}
-            />
+            Your name:{' '}
+            {process.env.NODE_ENV === 'production' ? (
+              { name }
+            ) : (
+              <input
+                value={name}
+                onChange={(e) => {
+                  setName(e.target.value)
+                }}
+              />
+            )}
           </p>
         </div>
       </div>
@@ -212,4 +215,4 @@ function App(props) {
   )
 }
 
-export default withRouter(App)
+export default App
