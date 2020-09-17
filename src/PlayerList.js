@@ -8,6 +8,7 @@ function PlayerList({
   headline = 'Players',
   onPlayerClick = () => {},
   showRoles = false,
+  clickable = false,
 }) {
   if (!game) {
     return null
@@ -22,7 +23,10 @@ function PlayerList({
           const role = getRoleName(game.roles[name])
 
           return (
-            <div className="col-4 col-md-3 my-3 player-card" key={`player-${i}`}>
+            <div
+              className={`col-4 col-md-3 my-3 player-card ${clickable ? 'clickable' : ''}`}
+              key={`player-${i}`}
+            >
               <div className="card h-100">
                 <div
                   className={`py-3 text-center ${name === president ? 'president' : ''} ${

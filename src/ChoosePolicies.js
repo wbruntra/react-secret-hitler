@@ -158,11 +158,11 @@ function ChoosePolicies({ game, playerName, gameRef }) {
 
   if (!job) {
     if (process.env.NODE_ENV !== 'production') {
-      return 'Waiting for government to choose a new policy...'
+      return 'Waiting on government to choose a new policy...'
     }
     return (
       <SimpleOverlay title="Government in Session">
-        <p>Waiting for government to choose a new policy...</p>
+        <p>Waiting on government to choose a new policy...</p>
       </SimpleOverlay>
     )
   }
@@ -174,7 +174,7 @@ function ChoosePolicies({ game, playerName, gameRef }) {
   ) {
     return (
       <SimpleOverlay title="Government in Session">
-        <p>Waiting for {theme.chancellorTitle}</p>
+        <p>Waiting on {theme.chancellorTitle}</p>
       </SimpleOverlay>
     )
   }
@@ -182,13 +182,13 @@ function ChoosePolicies({ game, playerName, gameRef }) {
   if (job === theme.presidentTitle && game.presidentRejectedVeto) {
     return (
       <SimpleOverlay title="Government in Session">
-        <p>Rejected veto. Waiting for {theme.chancellorTitle}</p>
+        <p>Rejected veto. Waiting on {theme.chancellorTitle}</p>
       </SimpleOverlay>
     )
   }
 
   if (job === theme.chancellorTitle && game.chancellorHasVetoed && !game.presidentRejectedVeto) {
-    return `Veto proposed. Waiting for ${theme.presidentTitle} to decide.`
+    return `Veto proposed. Waiting on ${theme.presidentTitle} to decide.`
   }
 
   if (
@@ -201,7 +201,7 @@ function ChoosePolicies({ game, playerName, gameRef }) {
         <div className="row">
           <div className="col">
             <p>You are the {job}</p>
-            <p>Waiting for {theme.presidentTitle} to choose</p>
+            <p>Waiting on {theme.presidentTitle} to choose</p>
           </div>
         </div>
       </SimpleOverlay>

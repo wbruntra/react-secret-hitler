@@ -142,28 +142,31 @@ function App(props) {
   const wasLastPresident = get(game, 'lastPresident') === name
   const gameOver = isGameOver(game)
 
-  if (viewingIdentity) {
-    return <RoleReveal game={game} playerName={chosenPlayer} handleOkay={dismissReveal} />
-  }
-
-  if (game.presidentShouldInvestigate && wasLastPresident) {
-    return (
-      <>
-        <PlayerList
-          headline={'Choose a player to investigate'}
-          game={game}
-          playerName={name}
-          onPlayerClick={handleChoosePlayer}
-        />
-      </>
-    )
-  }
-
   return (
     <div className="container">
+      {viewingIdentity && (
+        <SimpleOverlay title={'Presidential Investigation'} onHide={dismissReveal}>
+          <RoleReveal game={game} playerName={chosenPlayer} />
+        </SimpleOverlay>
+      )}
       {game.presidentShouldViewPolicies && wasLastPresident && (
         <SimpleOverlay title={'Policy Preview'} onHide={handleDismissPolicies}>
           <DisplayPolicies policies={game.policies.slice(0, 3)} withChecks={false} />
+        </SimpleOverlay>
+      )}
+      {game.presidentShouldInvestigate && (
+        <SimpleOverlay title={'Presidential Investigation'}>
+          {wasLastPresident ? (
+            <PlayerList
+              headline={'Choose a player to investigate'}
+              game={game}
+              playerName={name}
+              onPlayerClick={handleChoosePlayer}
+              clickable={true}
+            />
+          ) : (
+            <p>Waiting on {theme.presidentTitle} to investigate a player</p>
+          )}
         </SimpleOverlay>
       )}
 
