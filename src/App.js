@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import produce from 'immer'
-import { get, capitalize } from 'lodash'
+import { get, capitalize, update } from 'lodash'
 import PlayerList from './PlayerList'
 import Government from './Government'
 import EventList from './EventList'
@@ -12,6 +12,8 @@ import ActionBar from './ActionBar'
 import { updateGame, refreshPolicies, assignRoles, createPolicies, isGameOver } from './utils'
 import SpecialRulesModal from './SpecialRulesModal'
 import theme from './theme'
+import DisplayPolicies from './DisplayPolicies'
+import SimpleOverlay from './SimpleOverlay'
 
 const { redTeamLeader } = theme
 
@@ -129,6 +131,14 @@ function App(props) {
     )
   }
 
+  const handleDismissPolicies = () => {
+    const newGame = produce(game, (draft) => {
+      draft.events.push(`${name} viewed the top policies`)
+      draft.presidentShouldViewPolicies = false
+    })
+    updateGame(gameRef, newGame)
+  }
+
   const wasLastPresident = get(game, 'lastPresident') === name
   const gameOver = isGameOver(game)
 
@@ -151,6 +161,12 @@ function App(props) {
 
   return (
     <div className="container">
+      {game.presidentShouldViewPolicies && wasLastPresident && (
+        <SimpleOverlay title={'Policy Preview'} onHide={handleDismissPolicies}>
+          <DisplayPolicies policies={game.policies.slice(0, 3)} withChecks={false} />
+        </SimpleOverlay>
+      )}
+
       <h1 className="headline text-center mb-3">Secret {capitalize(redTeamLeader)}</h1>
       <RoleModal game={game} playerName={name} />
       <SpecialRulesModal game={game} />
@@ -206,7 +222,7 @@ function App(props) {
           </>
         )}
       </div>
-      {hosting && <ActionBar game={game} gameRef={gameRef} />}
+      {hosting && <ActionBar game={game} gameRef={gameRef} hosting={hosting} />}
       <hr />
       <EventList game={game} show={6} />
     </div>

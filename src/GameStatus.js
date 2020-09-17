@@ -26,17 +26,17 @@ function GameStatus({ game }) {
 
   let endDeclaration
   if (counts.fascist === 6) {
-    endDeclaration = <h1>{capitalize(redTeam)}s Win with 6 Policies!</h1>
+    endDeclaration = <h1>{redTeam} wins with 6 Policies!</h1>
   }
 
   if (counts.liberal === 5) {
-    endDeclaration = <h1>{capitalize(blueTeam)}s Win with 5 Policies!</h1>
+    endDeclaration = <h1>{blueTeam} wins with 5 Policies!</h1>
   }
 
   if (counts.fascist >= 3 && game.governmentApproved && hitlerIsChancellor(game)) {
     endDeclaration = (
       <h1>
-        {capitalize(redTeam)}s win Because {capitalize(redTeamLeader)} is Chancellor!
+        {redTeam} wins because {redTeamLeader} is {theme.chancellorTitle}!
       </h1>
     )
   }

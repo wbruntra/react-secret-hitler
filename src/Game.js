@@ -7,10 +7,9 @@ import App from './App'
 
 function Game(props) {
   const prod = process.env.NODE_ENV === 'production'
-  const defaultName = !prod ? localStorage.getItem('playerName') || '' : ''
 
   const [loaded, setLoaded] = useState(false)
-  const [name, setName] = useState(defaultName)
+  const [name, setName] = useState(localStorage.getItem('playerName') || '')
   const [game, setGame] = useState(null)
   const [gameRef, setGameRef] = useState(null)
   const code = get(props, 'match.params.code', null)

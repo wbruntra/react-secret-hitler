@@ -82,7 +82,7 @@ function SpecialRulesModal({ game }) {
               a player, and the veto power is unlocked
             </li>
             <li>
-              The policy deck contains 11 {redTeam} and 6 {blueTeam} policies
+              The policy deck contains 11 {theme.RED} and 6 {theme.BLUE} policies
             </li>
             <li>
               After three failed attempts to form a government, the top policy card from the deck

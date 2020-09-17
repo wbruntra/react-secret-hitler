@@ -3,7 +3,7 @@ import produce from 'immer'
 import { updateGame, refreshPolicies, getThemedPolicyName } from './utils'
 import DisplayPolicies from './DisplayPolicies'
 
-function ActionBar({ game, gameRef, playerName = '' }) {
+function ActionBar({ game, gameRef, playerName = '', hosting = false }) {
   const [confirmationNeeded, setConfirmationNeeded] = useState(false)
   const [viewing, setViewing] = useState(false)
   const [doneViewing, setDoneViewing] = useState(true)
@@ -50,9 +50,8 @@ function ActionBar({ game, gameRef, playerName = '' }) {
         tempPolicies = refreshPolicies(game)
         draft.discards = []
       }
-      const event = `${playerName} viewed the top policies`
+      draft.presidentShouldViewPolicies = true
       draft.policies = tempPolicies
-      draft.events.push(event)
     })
     setConfirmationNeeded(true)
     setViewing(true)
@@ -75,16 +74,16 @@ function ActionBar({ game, gameRef, playerName = '' }) {
     setPreparedState(newGame)
   }
 
-  if (!doneViewing) {
-    return (
-      <DisplayPolicies
-        onPolicyClick={() => {
-          setDoneViewing(true)
-        }}
-        policies={game.policies.slice(0, 3)}
-      />
-    )
-  }
+  // if (playerName !== game.lastPresident && !doneViewing) {
+  //   return (
+  //     <DisplayPolicies
+  //       onPolicyClick={() => {
+  //         setDoneViewing(true)
+  //       }}
+  //       policies={game.policies.slice(0, 3)}
+  //     />
+  //   )
+  // }
 
   return (
     <>

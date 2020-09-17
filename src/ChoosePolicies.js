@@ -274,11 +274,11 @@ function ChoosePolicies({ game, playerName, gameRef }) {
           onPolicyClick={(i) => togglePolicy(i)}
           chosen={chosen}
         />
-        <div className="row">
+        <div className="row mt-3">
           <div className="col">
             <button
               type="button"
-              className="btn btn-primary mt-3"
+              className="btn btn-primary"
               onClick={() => {
                 const confirmed = getPolicies()
                 if (confirmed.length === policies.length - 1) {

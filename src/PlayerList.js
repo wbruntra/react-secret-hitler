@@ -15,7 +15,7 @@ function PlayerList({
   let { president, chancellor } = game.government
 
   return (
-    <div className="section">
+    <div className="section mt-3">
       <h2 className="text-center">{headline}</h2>
       <div className="row">
         {game.players.map((name, i) => {

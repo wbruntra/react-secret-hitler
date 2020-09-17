@@ -1,11 +1,11 @@
 const theme = {
-  blueTeam: 'Gryffindor',
+  blueTeam: 'Order of Phoenix',
   redTeam: 'Death-Eater',
   redTeamLeader: 'Voldemort',
-  presidentTitle: 'Minister',
-  chancellorTitle: 'Vice-Minister',
-  RED: 'BAD',
-  BLUE: 'GOOD',
+  presidentTitle: 'Minister for Magic',
+  chancellorTitle: 'Chief Warlock',
+  RED: 'Wizard Purity',
+  BLUE: 'Muggle Protection',
 }
 
 export default theme

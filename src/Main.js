@@ -9,48 +9,9 @@ import firestore from './firestore'
 import { updateGame } from './utils'
 import theme from './theme'
 import App from './App'
+import defaultGame from './defaultGame'
 
 const { redTeamLeader } = theme
-
-let testPlayers
-if (process.env.NODE_ENV === 'production') {
-  testPlayers = []
-} else {
-  testPlayers = [
-    'adam',
-    'cindy',
-    'david',
-    'edgar',
-    'fred',
-    // 'gary', 'helen', 'igor'
-  ]
-}
-
-const defaultGame = {
-  players: testPlayers,
-  roles: {},
-  started: false,
-  host: null,
-  policies: [],
-  discards: [],
-  government: {
-    president: null,
-    chancellor: null,
-  },
-  governmentApproved: false,
-  events: [],
-  presidentHasChosen: false,
-  policyChoices: [],
-  enactedPolicies: [],
-  gameOver: false,
-  presidentShouldInvestigate: false,
-  presidentShouldKill: false,
-  vetoAvailable: false,
-  chancellorHasVetoed: false,
-  presidentRejectedVeto: false,
-  lastPresident: null,
-  lastChancellor: null,
-}
 
 const randomChoice = (arr) => {
   return arr[random(0, arr.length - 1)]
@@ -115,7 +76,7 @@ function Main(props) {
 
   const handleJoin = (e) => {
     e.preventDefault()
-    history.push(`/g/${gameCode}?name=${name}`)
+    history.push(`/g/${gameCode}`)
   }
 
   if (!nameConfirmed) {
@@ -129,6 +90,7 @@ function Main(props) {
                 autoFocus
                 value={name}
                 onChange={(e) => {
+                  localStorage.setItem('playerName', e.target.value)
                   setName(e.target.value)
                 }}
               />
@@ -150,7 +112,13 @@ function Main(props) {
           </>
         </div>
         <div className="row mt-3">
-          <input value={gameCode} onChange={(e) => setGameCode(e.target.value)} />
+          Game Code:
+          <input
+            autoFocus
+            className="ml-3"
+            value={gameCode}
+            onChange={(e) => setGameCode(e.target.value)}
+          />
         </div>
         <div className="row mt-3">
           <div className="col">

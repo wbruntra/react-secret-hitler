@@ -29,7 +29,7 @@ function RoleModal({ game, playerName, autoReveal = false, onHide = () => {} }) 
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Your Secret Role: {capitalize(roleName)} </Modal.Title>
+          <Modal.Title>Your Secret Role: {roleName} </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="row justify-content-center role-reveal">
