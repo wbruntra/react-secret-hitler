@@ -24,6 +24,7 @@ function App(props) {
   const [chancellor, setChancellor] = useState(null)
   const [viewingIdentity, setViewingIdentity] = useState(false)
   const [chosenPlayer, setChosenPlayer] = useState(null)
+  const [error, setError] = useState(null)
 
   const handleChoosePlayer = (p) => {
     setChosenPlayer(p)
@@ -38,6 +39,10 @@ function App(props) {
   const handleStart = () => {
     if (game.players.length < 5) {
       console.log('Need more players')
+      setError('Need more players')
+      window.setTimeout(() => {
+        setError(null)
+      }, 2500)
       return
     }
     const roles = assignRoles(game)
@@ -113,15 +118,25 @@ function App(props) {
   }
 
   if (!game.started) {
+    const enoughPlayers = game.players.length >= 5
     return (
       <div className="container">
         <PlayerList game={game} playerName={name} onPlayerClick={handlePlayerClick} />
         {hosting && (
           <div className="row mt-3">
             <div className="col">
-              <button className="btn btn-primary" onClick={handleStart}>
+              <button
+                className="btn btn-primary"
+                disabled={!enoughPlayers}
+                onClick={() => {
+                  if (enoughPlayers) {
+                    handleStart()
+                  }
+                }}
+              >
                 Start Game
               </button>
+              {!enoughPlayers && <span className="ml-4">More players needed</span>}
             </div>
           </div>
         )}
@@ -197,6 +212,7 @@ function App(props) {
         playerName={name}
         onPlayerClick={handlePlayerClick}
         showRoles={gameOver}
+        clickable={hosting}
       />
       <Government
         game={game}

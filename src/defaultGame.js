@@ -6,8 +6,8 @@ if (process.env.NODE_ENV === 'production') {
     'adam',
     'cindy',
     'david',
-    'edgar',
-    'fred',
+    // 'edgar',
+    // 'fred',
     // 'gary', 'helen', 'igor'
   ]
 }
@@ -32,7 +32,6 @@ const defaultGame = {
   presidentShouldInvestigate: false,
   presidentShouldKill: false,
   presidentShouldViewPolicies: false,
-  vetoAvailable: false,
   chancellorHasVetoed: false,
   presidentRejectedVeto: false,
   lastPresident: null,

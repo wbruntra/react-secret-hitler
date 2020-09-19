@@ -82,6 +82,7 @@ function Main(props) {
   if (!nameConfirmed) {
     return (
       <div className="container">
+        <h2 className="headline text-center">Secret {capitalize(redTeamLeader)}</h2>
         <div className="row mt-3">
           <div className="col-3">Enter your name:</div>
           <div className="col">
@@ -112,15 +113,10 @@ function Main(props) {
           </>
         </div>
         <div className="row mt-3">
-          Game Code:
-          <input
-            autoFocus
-            className="ml-3"
-            value={gameCode}
-            onChange={(e) => setGameCode(e.target.value)}
-          />
-        </div>
-        <div className="row mt-3">
+          <div className="col-6">
+            <label className="pr-3">Game Code:</label>
+            <input autoFocus value={gameCode} onChange={(e) => setGameCode(e.target.value)} />
+          </div>
           <div className="col">
             <button className="btn btn-primary ml-3" onClick={handleHosting}>
               Host Game
@@ -131,9 +127,12 @@ function Main(props) {
               Join Game
             </button>
           </div>
+        </div>
+        <hr />
+        <div className="row mt-3">
           <div className="col">
             <button className="btn btn-primary ml-3" onClick={handleCreateGame}>
-              Create Game
+              Create New Game
             </button>
           </div>
         </div>

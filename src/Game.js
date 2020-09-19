@@ -55,7 +55,7 @@ function Game(props) {
     return null
   }
 
-  if ((prod && !submitted) || !game.players.includes(name)) {
+  if (!submitted || !game.players.includes(name)) {
     return (
       <div className="container">
         <h2>Confirm your name</h2>
