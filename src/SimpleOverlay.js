@@ -1,7 +1,13 @@
 import React, { useState } from 'react'
 import Modal from 'react-bootstrap/Modal'
 
-function SimpleOverlay({ children, title = 'Info', autoReveal = true, onHide = () => {} }) {
+function SimpleOverlay({
+  children,
+  title = 'Info',
+  forceShow = false,
+  autoReveal = true,
+  onHide = () => {},
+}) {
   const [show, setShow] = useState(autoReveal === true)
 
   const handleClose = () => {
@@ -13,7 +19,7 @@ function SimpleOverlay({ children, title = 'Info', autoReveal = true, onHide = (
 
   return (
     <>
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={forceShow || show} onHide={handleClose}>
         <Modal.Header>
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>

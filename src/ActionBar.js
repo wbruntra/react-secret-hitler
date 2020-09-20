@@ -74,22 +74,11 @@ function ActionBar({ game, gameRef, playerName = '', hosting = false }) {
     setPreparedState(newGame)
   }
 
-  // if (playerName !== game.lastPresident && !doneViewing) {
-  //   return (
-  //     <DisplayPolicies
-  //       onPolicyClick={() => {
-  //         setDoneViewing(true)
-  //       }}
-  //       policies={game.policies.slice(0, 3)}
-  //     />
-  //   )
-  // }
-
   return (
     <>
       {!confirmationNeeded ? (
         <div className="row mt-3">
-          <div className="col-6 col-md-3">
+          <div className="col-6 col-md-3 mb-3">
             <button
               className="btn btn-warning"
               onClick={() => {
@@ -99,7 +88,7 @@ function ActionBar({ game, gameRef, playerName = '', hosting = false }) {
               Enact Top Policy
             </button>
           </div>
-          <div className="col-6 col-md-3">
+          <div className="col-6 col-md-3 mb-3">
             <button className="btn btn-warning" onClick={viewTopPolicies}>
               View Top Policies
             </button>
@@ -117,15 +106,17 @@ function ActionBar({ game, gameRef, playerName = '', hosting = false }) {
         </div>
       ) : (
         <div className="row mt-3">
-          <div className="col-4 col-md-3">
+          <div className="col-6 col-md-3">
             <button
-              className="btn btn-danger mr-3"
+              className="btn btn-danger"
               onClick={() => {
                 confirmAction(true)
               }}
             >
               Confirm
             </button>
+          </div>
+          <div className="col-6 col-md-3">
             <button
               className="btn btn-info"
               onClick={() => {

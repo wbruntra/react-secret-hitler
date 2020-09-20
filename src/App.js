@@ -18,13 +18,14 @@ import SimpleOverlay from './SimpleOverlay'
 const { redTeamLeader } = theme
 
 function App(props) {
-  const { game, gameRef, hosting = false } = props
+  const { game, gameRef, hosting = false, showLastPolicy, setShowLastPolicy } = props
   const [name, setName] = useState(props.name || '')
   const [president, setPresident] = useState(null)
   const [chancellor, setChancellor] = useState(null)
   const [viewingIdentity, setViewingIdentity] = useState(false)
   const [chosenPlayer, setChosenPlayer] = useState(null)
   const [error, setError] = useState(null)
+  const [approvedPolicies, setApprovedPolicies] = useState(0)
 
   const handleChoosePlayer = (p) => {
     setChosenPlayer(p)
@@ -159,6 +160,17 @@ function App(props) {
 
   return (
     <div className="container">
+      {game.enactedPolicies.length > approvedPolicies && (
+        <SimpleOverlay
+          title={`Policy #${approvedPolicies + 1}`}
+          forceShow={game.enactedPolicies.length > approvedPolicies}
+          onHide={() => {
+            setApprovedPolicies(approvedPolicies + 1)
+          }}
+        >
+          <DisplayPolicies policies={game.enactedPolicies.slice(-1)} withChecks={false} />
+        </SimpleOverlay>
+      )}
       {viewingIdentity && (
         <SimpleOverlay title={'Presidential Investigation'} onHide={dismissReveal}>
           <RoleReveal game={game} playerName={chosenPlayer} />
@@ -223,12 +235,12 @@ function App(props) {
       <div className="row mt-3">
         {!game.governmentApproved && hosting && (
           <>
-            <div className="col-4 col-md-3">
+            <div className="col-6 col-md-auto">
               <button className="btn btn-secondary" onClick={setGovernment}>
                 Approve Government
               </button>
             </div>
-            <div className="col-4 col-md-3">
+            <div className="col-6 col-md-auto">
               <button
                 className="btn btn-secondary"
                 onClick={() => {

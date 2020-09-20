@@ -4,16 +4,18 @@ import produce from 'immer'
 import firestore from './firestore'
 import { updateGame } from './utils'
 import App from './App'
+import defaultGame from './defaultGame'
 
 function Game(props) {
   const prod = process.env.NODE_ENV === 'production'
 
   const [loaded, setLoaded] = useState(false)
   const [name, setName] = useState(localStorage.getItem('playerName') || '')
-  const [game, setGame] = useState(null)
+  const [game, setGame] = useState(defaultGame)
   const [gameRef, setGameRef] = useState(null)
   const code = get(props, 'match.params.code', null)
   const [submitted, setSubmitted] = useState(false)
+  const [showLastPolicy, setShowLastPolicy] = useState(false)
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -79,7 +81,15 @@ function Game(props) {
     )
   }
 
-  return <App game={game} gameRef={gameRef} name={name} />
+  return (
+    <App
+      game={game}
+      gameRef={gameRef}
+      name={name}
+      showLastPolicy={showLastPolicy}
+      setShowLastPolicy={setShowLastPolicy}
+    />
+  )
 }
 
 export default Game

@@ -7,14 +7,14 @@ function Government({ game, showPotentialGovernment = false, president = '', cha
   }
   return (
     <div className="row mt-3">
-      <div className="col-8">
+      <div className="col-12">
         <div className="row">
-          <div className="col-5">Proposed {theme.presidentTitle}:</div>
-          <div className="col-6">{president}</div>
+          <div className="col-auto">Proposed {theme.presidentTitle}:</div>
+          <div className="col">{president}</div>
         </div>
         <div className="row">
-          <div className="col-5">Proposed {theme.chancellorTitle}:</div>
-          <div className="col-6">{chancellor}</div>
+          <div className="col-auto">Proposed {theme.chancellorTitle}:</div>
+          <div className="col">{chancellor}</div>
         </div>
       </div>
     </div>

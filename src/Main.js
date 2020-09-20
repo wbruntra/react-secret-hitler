@@ -28,6 +28,7 @@ function Main(props) {
   const [name, setName] = useState(savedName)
   const [hosting, setHosting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
+  const [showLastPolicy, setShowLastPolicy] = useState(false)
 
   const history = useHistory()
 
@@ -44,7 +45,6 @@ function Main(props) {
     setGameRef(gRef)
     gRef.onSnapshot((doc) => {
       const gameData = doc.data()
-      console.log(gameData)
       setGame(gameData)
     })
     gRef.update({
@@ -84,7 +84,7 @@ function Main(props) {
       <div className="container">
         <h2 className="headline text-center">Secret {capitalize(redTeamLeader)}</h2>
         <div className="row mt-3">
-          <div className="col-3">Enter your name:</div>
+          <div className="col-12 col-md-3">Enter your name:</div>
           <div className="col">
             <form onSubmit={handleNameConfirm}>
               <input
@@ -113,7 +113,7 @@ function Main(props) {
           </>
         </div>
         <div className="row mt-3">
-          <div className="col-6">
+          <div className="col-12 col-md-6 pb-3 pb-md-1">
             <label className="pr-3">Game Code:</label>
             <input autoFocus value={gameCode} onChange={(e) => setGameCode(e.target.value)} />
           </div>
