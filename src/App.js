@@ -75,7 +75,7 @@ function App(props) {
       event = `New government approved. ${theme.presidentTitle}: ${president}, ${theme.chancellorTitle}: ${chancellor}`
       newGame = produce(game, (draft) => {
         let tempPolicies = game.policies
-        if (game.policies < 3) {
+        if (game.policies.length < 3) {
           tempPolicies = refreshPolicies(game)
           draft.discards = []
         }
