@@ -41,7 +41,7 @@ function Main(props) {
     localStorage.setItem('gameCode', gameCode)
     console.log('hosting!', gameCode)
     setHosting(true)
-    let gRef = await firestore.collection('hgames').doc(gameCode)
+    let gRef = await firestore.collection('hgames').doc(gameCode.toLowerCase())
     setGameRef(gRef)
     gRef.onSnapshot((doc) => {
       const gameData = doc.data()

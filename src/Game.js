@@ -40,7 +40,7 @@ function Game(props) {
 
   useEffect(() => {
     const register = async () => {
-      const gRef = await firestore.collection('hgames').doc(code)
+      const gRef = await firestore.collection('hgames').doc(code.toLowerCase())
       setGameRef(gRef)
       setLoaded(true)
       gRef.onSnapshot((doc) => {
